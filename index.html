@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>അമ്മയോടൊപ്പം | CLC Velappaya - 100,000 Hail Mary Counter</title>
+  <meta name="description" content="അമ്മയോടൊപ്പം - CLC Velappaya presents 100,000 Hail Marys Devotional Offering Campaign. Track and submit Hail Marys in honour of Mother Mary.">
+  
+  <!-- Favicon / Marian Cross Icon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%231e3a8a'/><text y='65' x='50' text-anchor='middle' font-size='50' fill='white'>M</text><path d='M50 15 L50 40 M40 25 L60 25' stroke='%23f59e0b' stroke-width='4' stroke-linecap='round'/></svg>">
+
+  <!-- Google Fonts: Noto Sans Malayalam (for title), Cinzel, Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Noto+Sans+Malayalam:wght@700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            marian: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              200: '#b9ddfe',
+              300: '#7cc1fd',
+              400: '#36a1fa',
+              500: '#0c85eb',
+              600: '#0168c8',
+              700: '#0253a2',
+              800: '#064785',
+              900: '#0b3c6f',
+              950: '#07264a'
+            }
+          },
+          fontFamily: {
+            malayalam: ['"Noto Sans Malayalam"', 'sans-serif'],
+            cinzel: ['Cinzel', 'serif'],
+            sans: ['Outfit', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gradient-to-b from-sky-50 via-white to-blue-50 text-slate-800 min-h-screen font-sans selection:bg-marian-200 selection:text-marian-900 pb-16">
+
+  <!-- Background Divine Glow Effect -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div class="divine-orb orb-1"></div>
+    <div class="divine-orb orb-2"></div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+
+    <!-- Top Navigation / Header -->
+    <header class="text-center mb-8">
+      <!-- Organization Badge -->
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 border border-blue-200 shadow-sm backdrop-blur-md mb-3 text-xs sm:text-sm font-semibold text-marian-800 tracking-wide uppercase">
+        <i class="fa-solid fa-cross text-amber-500"></i>
+        <span>Presented by <strong>CLC Velappaya</strong></span>
+        <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+      </div>
+
+      <!-- Main Title (Kept in Malayalam as specified: അമ്മയോടൊപ്പം) -->
+      <div class="relative inline-block my-1">
+        <h1 class="font-malayalam text-4xl sm:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-950 via-marian-700 to-sky-600 drop-shadow-sm tracking-tight leading-tight sm:leading-snug mb-1">
+          അമ്മയോടൊപ്പം
+        </h1>
+        <div class="flex justify-center items-center gap-1.5 text-amber-400 text-xs sm:text-sm mb-1">
+          <i class="fa-solid fa-star text-[10px]"></i>
+          <i class="fa-solid fa-star text-xs"></i>
+          <i class="fa-solid fa-crown text-amber-500 mx-1"></i>
+          <i class="fa-solid fa-star text-xs"></i>
+          <i class="fa-solid fa-star text-[10px]"></i>
+        </div>
+      </div>
+
+      <!-- English Subtitle -->
+      <p class="text-sm sm:text-base text-slate-600 font-semibold tracking-wide">
+        100,000 Hail Marys Devotional Offering Campaign
+      </p>
+      <p class="text-xs text-marian-700 font-medium tracking-wider uppercase mt-1">
+        United in Prayer with Our Blessed Mother
+      </p>
+
+      <!-- Quick Action Controls (Sound, Prayer Guide, Mysteries) -->
+      <div class="flex items-center justify-center gap-2.5 sm:gap-3 mt-4 flex-wrap">
+        <button id="toggleSoundBtn" class="control-btn" title="Toggle Sound">
+          <i id="soundIcon" class="fa-solid fa-volume-high text-marian-600"></i>
+          <span class="text-xs font-semibold text-slate-700" id="soundLabel">Sound: On</span>
+        </button>
+
+        <button id="openPrayerModalBtn" class="control-btn" title="View Prayers">
+          <i class="fa-solid fa-book-bible text-marian-600"></i>
+          <span class="text-xs font-semibold text-slate-700">Prayer Guide</span>
+        </button>
+
+        <button id="openMysteriesBtn" class="control-btn" title="Rosary Mysteries">
+          <i class="fa-solid fa-hands-praying text-marian-600"></i>
+          <span class="text-xs font-semibold text-slate-700">Rosary Mysteries</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Target Goal & Progress Dashboard (100,000 Target) -->
+    <section class="card-marian p-6 sm:p-8 mb-8 relative overflow-hidden text-center">
+      <div class="halo-circle"></div>
+
+      <div class="relative z-10">
+        <!-- Target Badge & Today's Count -->
+        <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/90 text-blue-900 text-xs font-bold">
+            <i class="fa-solid fa-bullseye text-blue-600"></i> Target: 100,000 Hail Marys
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100/90 text-amber-900 text-xs font-bold">
+            <i class="fa-solid fa-calendar-day text-amber-600"></i> Today's Total: <strong id="todayCountDisplay" class="font-extrabold">0</strong>
+          </span>
+        </div>
+
+        <!-- Big Counter Display -->
+        <div class="py-3">
+          <div class="text-xs font-bold tracking-widest text-marian-600 uppercase mb-1">
+            Total Hail Marys Offered
+          </div>
+          <div class="flex items-baseline justify-center gap-2">
+            <span id="counterValue" class="font-cinzel text-5xl sm:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-950 via-marian-800 to-blue-900 tracking-tight transition-all duration-300">
+              0
+            </span>
+            <span class="text-lg sm:text-2xl font-bold text-slate-400">/ 100,000</span>
+          </div>
+          <p class="text-xs sm:text-sm font-medium text-slate-500 mt-1">
+            Remaining: <strong id="remainingDisplay" class="text-marian-700 font-bold">100,000</strong> to reach the target
+          </p>
+        </div>
+
+        <!-- Progress Bar & Milestones -->
+        <div class="mt-4 max-w-xl mx-auto">
+          <!-- Percentage -->
+          <div class="flex justify-between items-center text-xs font-bold text-slate-600 mb-2">
+            <span class="flex items-center gap-1 text-marian-800">
+              <i class="fa-solid fa-chart-line text-blue-500"></i> Campaign Progress
+            </span>
+            <span id="percentageDisplay" class="text-sm font-extrabold text-blue-800">
+              0.00%
+            </span>
+          </div>
+
+          <!-- Progress Track -->
+          <div class="w-full bg-blue-100/90 rounded-full h-4 sm:h-5 p-0.5 shadow-inner relative overflow-hidden border border-blue-200">
+            <div id="progressBar" class="h-full rounded-full bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 transition-all duration-700 relative flex items-center justify-end pr-1.5 shadow" style="width: 0%;">
+              <span class="w-2.5 h-2.5 rounded-full bg-white animate-ping"></span>
+            </div>
+          </div>
+
+          <!-- Milestone marks removed per user request -->
+        </div>
+      </div>
+    </section>
+
+    <!-- PRIMARY INPUT SECTION: Enter Number of Hail Marys Prayed -->
+    <section class="card-marian p-6 sm:p-8 mb-8 text-center relative">
+      <div class="max-w-md mx-auto">
+        
+        <!-- Header -->
+        <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-blue-100/80 text-blue-700 text-xl mb-3 shadow-sm">
+          <i class="fa-solid fa-hands-praying"></i>
+        </div>
+        
+        <h2 class="text-xl sm:text-2xl font-bold text-blue-950">
+          Enter Prayers Prayed
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1 mb-6">
+          Type the number of Hail Marys you or your family prayed and click Submit to add to the 100,000 offering.
+        </p>
+
+        <!-- Direct Input Form -->
+        <div id="prayerEntryContainer" class="space-y-4">
+          <!-- Number Input Field -->
+          <div class="text-left">
+            <label for="hailMaryInput" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+              Number of Hail Marys:
+            </label>
+            <div class="flex items-stretch rounded-2xl border-2 border-blue-200 focus-within:border-marian-600 bg-white shadow-sm overflow-hidden transition">
+              <!-- Decrement button -->
+              <button type="button" id="decrementInputBtn" onclick="handleDecrement()" class="px-4 text-slate-400 hover:text-blue-600 hover:bg-blue-50 text-lg font-bold transition flex items-center justify-center cursor-pointer" title="Minus 1">
+                <i class="fa-solid fa-minus"></i>
+              </button>
+
+              <!-- Main Numeric Input -->
+              <input
+                type="number"
+                id="hailMaryInput"
+                name="hailMaryInput"
+                min="1"
+                max="100000"
+                placeholder="e.g. 10, 50, 100..."
+                class="w-full py-3.5 px-2 text-center text-3xl font-extrabold text-blue-950 outline-none focus:ring-0 placeholder:text-slate-300 placeholder:text-xl"
+                autocomplete="off"
+                onkeydown="if(event.key==='Enter'){event.preventDefault(); handleSubmitPrayers();}"
+              />
+
+              <!-- Increment button -->
+              <button type="button" id="incrementInputBtn" onclick="handleIncrement()" class="px-4 text-slate-400 hover:text-blue-600 hover:bg-blue-50 text-lg font-bold transition flex items-center justify-center cursor-pointer" title="Plus 1">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            type="button"
+            id="submitPrayersBtn"
+            onclick="handleSubmitPrayers()"
+            class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-blue-900 via-marian-700 to-blue-800 text-white font-bold text-base sm:text-lg shadow-lg hover:shadow-xl hover:from-blue-950 hover:to-marian-900 active:scale-[0.98] transition flex items-center justify-center gap-2.5 cursor-pointer"
+          >
+            <i class="fa-solid fa-cross text-amber-300"></i>
+            <span>Submit to Offering</span>
+          </button>
+        </div>
+
+        <!-- Quick Preset Chips (Instant Add) -->
+        <div class="mt-6 pt-5 border-t border-slate-100">
+          <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2.5">
+            Quick Add (Tap to add instantly)
+          </div>
+          <div class="flex flex-wrap justify-center gap-2">
+            <button type="button" class="preset-chip" data-amount="1" onclick="addPrayers(1)">
+              +1 Single
+            </button>
+            <button type="button" class="preset-chip" data-amount="10" onclick="addPrayers(10)">
+              +10 (1 Decade)
+            </button>
+            <button type="button" class="preset-chip" data-amount="50" onclick="addPrayers(50)">
+              +50 (1 Rosary)
+            </button>
+            <button type="button" class="preset-chip" data-amount="100" onclick="addPrayers(100)">
+              +100 (2 Rosaries)
+            </button>
+            <button type="button" class="preset-chip" data-amount="150" onclick="addPrayers(150)">
+              +150 (3 Rosaries)
+            </button>
+          </div>
+        </div>
+
+        <!-- Auxiliary Action Buttons: Undo, Share, Adjust -->
+        <div class="flex items-center justify-center gap-2.5 pt-5 mt-5 border-t border-slate-100 flex-wrap">
+          <button id="undoBtn" class="aux-btn text-slate-600 hover:text-red-600 hover:border-red-200" title="Undo Last Entry">
+            <i class="fa-solid fa-rotate-left"></i>
+            <span>Undo Last</span>
+          </button>
+
+          <button id="shareWhatsAppBtn" class="aux-btn bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100" title="Share Progress on WhatsApp">
+            <i class="fa-brands fa-whatsapp text-emerald-600"></i>
+            <span>Share Progress</span>
+          </button>
+
+          <button id="openResetModalBtn" class="aux-btn text-slate-500 hover:text-slate-800 hover:border-slate-300" title="Adjust or Reset Total">
+            <i class="fa-solid fa-sliders"></i>
+            <span>Adjust Total</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Today's Rosary Mysteries Box -->
+    <section class="card-marian p-5 sm:p-6 mb-8">
+      <div class="flex items-center justify-between mb-3 border-b border-blue-50 pb-3 flex-wrap gap-2">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-700 text-sm">
+            <i class="fa-solid fa-calendar-check"></i>
+          </div>
+          <div>
+            <h2 class="font-bold text-base sm:text-lg text-blue-950" id="mysteryDayHeading">
+              Today's Rosary Mystery
+            </h2>
+            <p class="text-xs text-slate-500 font-medium" id="mysterySubHeading">
+              Daily Rosary Meditation
+            </p>
+          </div>
+        </div>
+        <span id="currentDayBadge" class="px-3 py-1 bg-marian-100 text-marian-900 rounded-full text-xs font-bold">
+          Today
+        </span>
+      </div>
+
+      <!-- Mystery List Content -->
+      <div id="mysteryListContainer" class="space-y-2 mt-2 text-sm text-slate-700">
+        <!-- Injected via app.js -->
+      </div>
+    </section>
+
+    <!-- Statistics & Recent Offerings Breakdown -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+      <!-- Statistics -->
+      <div class="card-marian p-5">
+        <h3 class="font-bold text-sm sm:text-base text-slate-800 flex items-center gap-2 mb-3">
+          <i class="fa-solid fa-chart-pie text-blue-600"></i> Campaign Statistics
+        </h3>
+        <div class="space-y-2.5 text-xs sm:text-sm">
+          <div class="flex justify-between items-center py-1.5 border-b border-slate-100">
+            <span class="text-slate-500">Prayed Today:</span>
+            <span class="font-bold text-slate-800" id="statToday">0</span>
+          </div>
+          <div class="flex justify-between items-center py-1.5 border-b border-slate-100">
+            <span class="text-slate-500">Full Rosaries (50x):</span>
+            <span class="font-bold text-slate-800" id="statRosaries">0 Rosaries</span>
+          </div>
+          <div class="flex justify-between items-center py-1.5 border-b border-slate-100">
+            <span class="text-slate-500">Remaining to Target:</span>
+            <span class="font-bold text-marian-700" id="statRemaining">100,000</span>
+          </div>
+          <div class="flex justify-between items-center py-1.5">
+            <span class="text-slate-500">Last Entry:</span>
+            <span class="font-medium text-slate-600 text-xs" id="statLastUpdated">No prayers added yet</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Submissions -->
+      <div class="card-marian p-5">
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="font-bold text-sm sm:text-base text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-clock-rotate-left text-blue-600"></i> Recent Offerings
+          </h3>
+          <span class="text-[11px] text-slate-400">Last 5 submissions</span>
+        </div>
+        <div id="recentActivityList" class="space-y-2 text-xs">
+          <p class="text-slate-400 italic text-center py-6">
+            Submissions will appear here as prayers are entered.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Information & Credits -->
+    <footer class="text-center pt-4 pb-8 border-t border-blue-100 text-xs text-slate-500 space-y-2">
+      <div class="font-semibold text-slate-700 text-sm">
+        അമ്മയോടൊപ്പം • Holy Mary, Mother of God, Pray for Us
+      </div>
+      <div>
+        Presented with devotion by <strong class="text-marian-800">CLC Velappaya</strong> (Christian Life Community)
+      </div>
+      <div class="text-[11px] text-slate-400">
+        All offerings are saved to a shared global database. Every device sees the same total.
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- MODAL 1: Hail Mary Prayer Text (English & Malayalam) -->
+  <div id="prayerModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card max-w-lg">
+      <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-hands-praying text-blue-600"></i>
+          <h3 class="font-bold text-lg text-blue-950">Prayer Guide</h3>
+        </div>
+        <button class="close-modal-btn modal-close-trigger" data-target="prayerModal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="py-4 space-y-4 max-h-[70vh] overflow-y-auto pr-1">
+        <!-- English Hail Mary -->
+        <div class="p-4 rounded-xl bg-blue-50/70 border border-blue-100 text-slate-800 leading-relaxed">
+          <div class="text-xs font-bold text-marian-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <i class="fa-solid fa-cross text-amber-500"></i> Hail Mary (English)
+          </div>
+          <p class="text-base font-medium text-slate-800 leading-relaxed">
+            Hail Mary, full of grace, the Lord is with thee; blessed art thou amongst women, and blessed is the fruit of thy womb, Jesus.
+          </p>
+          <p class="text-base font-medium text-slate-800 leading-relaxed mt-2.5">
+            Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death.
+            <span class="block font-bold text-marian-900 mt-1">Amen.</span>
+          </p>
+        </div>
+
+        <!-- Malayalam Hail Mary Reference -->
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-malayalam leading-relaxed">
+          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 font-sans">
+            Hail Mary (മലയാളം)
+          </div>
+          <p class="text-sm font-normal">
+            നന്മനിറഞ്ഞ മറിയമേ സ്വസ്തി, കർത്താവ് അങ്ങയോടുകൂടെ, സ്ത്രീകളിൽ അങ്ങ് അനുഗ്രഹിക്കപ്പെട്ടവളാകുന്നു, അങ്ങയുടെ ഉദരത്തിൻ ഫലമായ ഈശോ അനുഗ്രഹിക്കപ്പെട്ടവനാകുന്നു.
+          </p>
+          <p class="text-sm font-normal mt-2">
+            പരിശുദ്ധ മറിയമേ, തമ്പുരാന്റെ അമ്മേ, പാപികളായ ഞങ്ങൾക്കുവേണ്ടി ഇപ്പോഴും ഞങ്ങളുടെ മരണസമയത്തും തമ്പുരാനോട് അപേക്ഷിക്കണമേ. ആമേൻ.
+          </p>
+        </div>
+
+        <!-- Fatima Prayer -->
+        <div class="p-3.5 rounded-lg bg-amber-50/60 border border-amber-200/70 text-xs sm:text-sm text-slate-700 leading-relaxed">
+          <div class="font-bold text-amber-900 mb-1">Fatima Prayer:</div>
+          "O My Jesus, forgive us our sins, save us from the fires of hell, lead all souls to Heaven, especially those most in need of Thy mercy. Amen."
+        </div>
+
+        <!-- Glory Be -->
+        <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-700 leading-relaxed">
+          <div class="font-bold text-slate-800 mb-1">Glory Be:</div>
+          "Glory be to the Father, and to the Son, and to the Holy Spirit. As it was in the beginning, is now, and ever shall be, world without end. Amen."
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 text-right">
+        <button class="px-5 py-2 rounded-xl bg-marian-700 hover:bg-marian-800 text-white text-sm font-semibold transition modal-close-trigger" data-target="prayerModal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Rosary Mysteries Guide Modal (All 4 Mysteries in English) -->
+  <div id="mysteriesModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card max-w-xl">
+      <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-rosary text-blue-600"></i>
+          <h3 class="font-bold text-lg text-blue-950">The Mysteries of the Holy Rosary</h3>
+        </div>
+        <button class="close-modal-btn modal-close-trigger" data-target="mysteriesModal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="py-4 space-y-4 max-h-[70vh] overflow-y-auto pr-1">
+        <!-- Joyful -->
+        <div class="mystery-card border-blue-200 bg-blue-50/50">
+          <div class="font-bold text-blue-950 text-base flex justify-between items-center">
+            <span>1. Joyful Mysteries</span>
+            <span class="text-xs bg-blue-200 px-2.5 py-0.5 rounded text-blue-900 font-semibold">Monday & Saturday</span>
+          </div>
+          <ol class="list-decimal list-inside mt-2 text-xs sm:text-sm text-slate-700 space-y-1">
+            <li>The Annunciation of the Lord to Mary</li>
+            <li>The Visitation of Mary to Elizabeth</li>
+            <li>The Nativity of our Lord Jesus Christ</li>
+            <li>The Presentation of the Infant Jesus in the Temple</li>
+            <li>The Finding of the Child Jesus in the Temple</li>
+          </ol>
+        </div>
+
+        <!-- Luminous -->
+        <div class="mystery-card border-amber-200 bg-amber-50/40">
+          <div class="font-bold text-amber-950 text-base flex justify-between items-center">
+            <span>2. Luminous Mysteries</span>
+            <span class="text-xs bg-amber-200 px-2.5 py-0.5 rounded text-amber-900 font-semibold">Thursday</span>
+          </div>
+          <ol class="list-decimal list-inside mt-2 text-xs sm:text-sm text-slate-700 space-y-1">
+            <li>The Baptism of Jesus in the Jordan River</li>
+            <li>The Self-Manifestation at the Wedding of Cana</li>
+            <li>The Proclamation of the Kingdom and Call to Repentance</li>
+            <li>The Transfiguration of Jesus on Mount Tabor</li>
+            <li>The Institution of the Holy Eucharist</li>
+          </ol>
+        </div>
+
+        <!-- Sorrowful -->
+        <div class="mystery-card border-rose-200 bg-rose-50/40">
+          <div class="font-bold text-rose-950 text-base flex justify-between items-center">
+            <span>3. Sorrowful Mysteries</span>
+            <span class="text-xs bg-rose-200 px-2.5 py-0.5 rounded text-rose-900 font-semibold">Tuesday & Friday</span>
+          </div>
+          <ol class="list-decimal list-inside mt-2 text-xs sm:text-sm text-slate-700 space-y-1">
+            <li>The Agony of Jesus in the Garden of Gethsemane</li>
+            <li>The Scourging of Jesus at the Pillar</li>
+            <li>The Crowning of Jesus with Thorns</li>
+            <li>The Carrying of the Cross to Calvary</li>
+            <li>The Crucifixion and Death of Jesus</li>
+          </ol>
+        </div>
+
+        <!-- Glorious -->
+        <div class="mystery-card border-emerald-200 bg-emerald-50/40">
+          <div class="font-bold text-emerald-950 text-base flex justify-between items-center">
+            <span>4. Glorious Mysteries</span>
+            <span class="text-xs bg-emerald-200 px-2.5 py-0.5 rounded text-emerald-900 font-semibold">Wednesday & Sunday</span>
+          </div>
+          <ol class="list-decimal list-inside mt-2 text-xs sm:text-sm text-slate-700 space-y-1">
+            <li>The Glorious Resurrection of Jesus</li>
+            <li>The Ascension of Jesus into Heaven</li>
+            <li>The Descent of the Holy Spirit at Pentecost</li>
+            <li>The Assumption of Mary into Heaven</li>
+            <li>The Coronation of Mary as Queen of Heaven and Earth</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 text-right">
+        <button class="px-5 py-2 rounded-xl bg-marian-700 hover:bg-marian-800 text-white text-sm font-semibold transition modal-close-trigger" data-target="mysteriesModal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: Reset & Adjust Modal -->
+  <div id="resetModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card max-w-sm">
+      <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+        <h3 class="font-bold text-base text-red-950 flex items-center gap-1.5">
+          <i class="fa-solid fa-triangle-exclamation text-amber-500"></i> Adjust or Reset Total
+        </h3>
+        <button class="close-modal-btn modal-close-trigger" data-target="resetModal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="py-4 space-y-4">
+        <div>
+          <label for="overrideCountInput" class="block text-xs font-semibold text-slate-600 mb-1">
+            Set Exact Total Count:
+          </label>
+          <input
+            type="number"
+            id="overrideCountInput"
+            min="0"
+            max="100000"
+            class="w-full px-3 py-2 border rounded-lg text-lg font-bold text-slate-800 focus:outline-none focus:border-blue-500"
+          />
+        </div>
+
+        <div class="pt-2 border-t border-slate-100">
+          <button id="clearAllBtn" class="w-full py-2.5 px-3 rounded-lg bg-red-50 text-red-700 border border-red-200 text-xs font-bold hover:bg-red-100 transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-trash-can"></i> Reset All Counts to 0
+          </button>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+        <button class="px-4 py-2 rounded-xl border text-slate-600 text-xs font-semibold modal-close-trigger" data-target="resetModal">
+          Cancel
+        </button>
+        <button id="saveOverrideBtn" class="px-4 py-2 rounded-xl bg-blue-700 text-white text-xs font-bold hover:bg-blue-800 transition">
+          Save Change
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification element -->
+  <div id="toast" class="toast-notification hidden">
+    <i id="toastIcon" class="fa-solid fa-check-circle text-emerald-400"></i>
+    <span id="toastMsg" class="text-xs sm:text-sm font-medium">Prayers submitted successfully!</span>
+  </div>
+
+  <!-- Main Application Script -->
+  <script src="app.js"></script>
+</body>
+</html>

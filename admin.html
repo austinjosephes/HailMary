@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel | അമ്മയോടൊപ്പം – CLC Velappaya</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Outfit', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Outfit', sans-serif; }
+    .card { background: #fff; border-radius: 1rem; box-shadow: 0 2px 16px 0 rgba(30,58,138,.08); padding: 1.5rem; }
+    .input { width: 100%; padding: .55rem .9rem; border: 1.5px solid #bfdbfe; border-radius: .6rem; font-size: 1rem; outline: none; transition: border-color .2s; }
+    .input:focus { border-color: #2563eb; }
+    .btn { padding: .55rem 1.4rem; border-radius: .6rem; font-weight: 700; font-size: .9rem; cursor: pointer; transition: background .2s, opacity .2s; }
+    .btn-primary { background: #1e3a8a; color: #fff; }
+    .btn-primary:hover { background: #1e40af; }
+    .btn-danger  { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+    .btn-danger:hover { background: #fca5a5; }
+    .btn-sm { padding: .3rem .8rem; font-size: .8rem; }
+    .stat-card { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); border-radius: 1rem; color: #fff; padding: 1.25rem 1.5rem; }
+    .history-row:nth-child(even) { background: #f0f7ff; }
+    #toast-admin { position: fixed; bottom: 1.5rem; right: 1.5rem; background: #1e3a8a; color: #fff; padding: .65rem 1.3rem; border-radius: .8rem; font-size: .9rem; font-weight: 600; z-index: 9999; display: none; }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-white min-h-screen">
+
+  <!-- Login screen -->
+  <div id="loginScreen" class="flex items-center justify-center min-h-screen px-4">
+    <div class="card w-full max-w-sm">
+      <div class="text-center mb-6">
+        <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center mx-auto mb-3 text-2xl text-blue-800">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h1 class="text-xl font-extrabold text-blue-950">Admin Login</h1>
+        <p class="text-xs text-slate-500 mt-1">അമ്മയോടൊപ്പം | CLC Velappaya</p>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wide">Username</label>
+          <input type="text" id="loginUser" class="input" placeholder="Username" autocomplete="username">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wide">Password</label>
+          <input type="password" id="loginPass" class="input" placeholder="Password" autocomplete="current-password"
+            onkeydown="if(event.key==='Enter') doLogin()">
+        </div>
+        <div id="loginError" class="hidden text-xs text-red-600 font-semibold text-center"></div>
+        <button onclick="doLogin()" class="btn btn-primary w-full text-center mt-2">
+          <i class="fa-solid fa-right-to-bracket mr-1"></i> Login
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Panel (hidden until logged in) -->
+  <div id="adminPanel" class="hidden max-w-4xl mx-auto px-4 py-8">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+      <div>
+        <h1 class="text-2xl font-extrabold text-blue-950">
+          <i class="fa-solid fa-shield-halved text-blue-600 mr-2"></i>Admin Panel
+        </h1>
+        <p class="text-xs text-slate-500">അമ്മയോടൊപ്പം | CLC Velappaya</p>
+      </div>
+      <div class="flex gap-2 flex-wrap">
+        <a href="/" class="btn btn-primary btn-sm">
+          <i class="fa-solid fa-arrow-left mr-1"></i> User Site
+        </a>
+        <button onclick="doLogout()" class="btn btn-danger btn-sm">
+          <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats row -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <div class="stat-card">
+        <div class="text-xs font-bold uppercase tracking-wider opacity-75 mb-1">Total Hail Marys</div>
+        <div class="text-3xl font-black" id="admTotal">—</div>
+        <div class="text-xs opacity-70 mt-1">/&nbsp;100,000</div>
+      </div>
+      <div class="stat-card" style="background: linear-gradient(135deg, #065f46 0%, #059669 100%)">
+        <div class="text-xs font-bold uppercase tracking-wider opacity-75 mb-1">Today's Count</div>
+        <div class="text-3xl font-black" id="admToday">—</div>
+        <div class="text-xs opacity-70 mt-1">Hail Marys today</div>
+      </div>
+      <div class="stat-card" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)">
+        <div class="text-xs font-bold uppercase tracking-wider opacity-75 mb-1">Remaining</div>
+        <div class="text-3xl font-black" id="admRemaining">—</div>
+        <div class="text-xs opacity-70 mt-1">to reach 100,000</div>
+      </div>
+    </div>
+
+    <!-- Control panel -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+
+      <!-- Override total -->
+      <div class="card">
+        <h3 class="font-bold text-base text-slate-800 mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-pen-to-square text-blue-600"></i> Set Exact Total
+        </h3>
+        <div class="flex gap-2">
+          <input type="number" id="overrideInput" class="input" min="0" max="100000" placeholder="e.g. 5000">
+          <button onclick="doOverride()" class="btn btn-primary whitespace-nowrap">Save</button>
+        </div>
+        <p class="text-xs text-slate-400 mt-2">Sets the global total to this exact number.</p>
+      </div>
+
+      <!-- Reset -->
+      <div class="card">
+        <h3 class="font-bold text-base text-slate-800 mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-rotate-left text-red-500"></i> Reset All Data
+        </h3>
+        <p class="text-xs text-slate-500 mb-3">This will reset the total, today's count, and all history to zero. This cannot be undone.</p>
+        <button onclick="doReset()" class="btn btn-danger w-full">
+          <i class="fa-solid fa-trash-can mr-1"></i> Reset Everything to 0
+        </button>
+      </div>
+    </div>
+
+    <!-- Submission history -->
+    <div class="card">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <h3 class="font-bold text-base text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-clock-rotate-left text-blue-600"></i> Submission History
+        </h3>
+        <button onclick="loadAdminData()" class="btn btn-primary btn-sm">
+          <i class="fa-solid fa-arrows-rotate mr-1"></i> Refresh
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-xs text-slate-500 uppercase tracking-wider border-b border-slate-100">
+              <th class="py-2 px-3 text-left font-bold">#</th>
+              <th class="py-2 px-3 text-left font-bold">Amount</th>
+              <th class="py-2 px-3 text-left font-bold">Time</th>
+              <th class="py-2 px-3 text-left font-bold">Action</th>
+            </tr>
+          </thead>
+          <tbody id="historyTableBody">
+            <tr><td colspan="4" class="text-center py-6 text-slate-400 italic">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /adminPanel -->
+
+  <div id="toast-admin"></div>
+
+  <script>
+    const API = '';
+    let adminToken = sessionStorage.getItem('adminToken') || '';
+    let pollTimer  = null;
+
+    // ── Login / Logout ────────────────────────────────────────────────────────
+    async function doLogin() {
+      const u = document.getElementById('loginUser').value.trim();
+      const p = document.getElementById('loginPass').value.trim();
+      const errEl = document.getElementById('loginError');
+      errEl.classList.add('hidden');
+
+      try {
+        const res = await fetch(`${API}/api/admin/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: u, password: p })
+        });
+        const data = await res.json();
+        if (res.ok && data.token) {
+          adminToken = data.token;
+          sessionStorage.setItem('adminToken', adminToken);
+          showPanel();
+        } else {
+          errEl.textContent = data.error || 'Invalid username or password.';
+          errEl.classList.remove('hidden');
+        }
+      } catch {
+        errEl.textContent = 'Cannot reach the server. Make sure server.py is running.';
+        errEl.classList.remove('hidden');
+      }
+    }
+
+    async function doLogout() {
+      try {
+        await fetch(`${API}/api/admin/logout`, {
+          method: 'POST',
+          headers: { 'X-Admin-Token': adminToken }
+        });
+      } catch {}
+      adminToken = '';
+      sessionStorage.removeItem('adminToken');
+      document.getElementById('adminPanel').classList.add('hidden');
+      document.getElementById('loginScreen').classList.remove('hidden');
+    }
+
+    function showPanel() {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('adminPanel').classList.remove('hidden');
+      loadAdminData();
+      if (pollTimer) clearInterval(pollTimer);
+      pollTimer = setInterval(loadAdminData, 8000);
+    }
+
+    // ── Load data ─────────────────────────────────────────────────────────────
+    async function loadAdminData() {
+      try {
+        const res = await fetch(`${API}/api/admin/data`, {
+          headers: { 'X-Admin-Token': adminToken }
+        });
+        if (res.status === 401) { doLogout(); return; }
+        const data = await res.json();
+        renderAdminData(data);
+      } catch (e) {
+        toast('Could not fetch data from server');
+      }
+    }
+
+    function renderAdminData(data) {
+      const total     = Number(data.totalCount) || 0;
+      const today     = Number(data.todayCount) || 0;
+      const remaining = Math.max(0, 100000 - total);
+      const history   = Array.isArray(data.history) ? data.history : [];
+
+      document.getElementById('admTotal').textContent     = total.toLocaleString();
+      document.getElementById('admToday').textContent     = today.toLocaleString();
+      document.getElementById('admRemaining').textContent = remaining.toLocaleString();
+
+      const tbody = document.getElementById('historyTableBody');
+      if (history.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-slate-400 italic">No submissions yet.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = history.map((item, idx) => `
+        <tr class="history-row border-b border-slate-50">
+          <td class="py-2 px-3 text-slate-400 text-xs">${idx + 1}</td>
+          <td class="py-2 px-3 font-bold text-blue-800">+${item.amount.toLocaleString()}</td>
+          <td class="py-2 px-3 text-slate-500 text-xs">${item.time}</td>
+          <td class="py-2 px-3">
+            <button onclick="deleteEntry(${item.id})" class="btn btn-danger btn-sm" title="Delete this entry">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // ── Override total ────────────────────────────────────────────────────────
+    async function doOverride() {
+      const val = parseInt(document.getElementById('overrideInput').value, 10);
+      if (isNaN(val) || val < 0) { toast('Enter a valid number (0–100000)'); return; }
+      if (!confirm(`Set total to ${val.toLocaleString()}?`)) return;
+      try {
+        const res = await fetch(`${API}/api/admin/override`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken },
+          body: JSON.stringify({ totalCount: val })
+        });
+        if (res.status === 401) { doLogout(); return; }
+        const data = await res.json();
+        renderAdminData(data);
+        document.getElementById('overrideInput').value = '';
+        toast(`Total set to ${val.toLocaleString()}`);
+      } catch { toast('Error updating total'); }
+    }
+
+    // ── Reset ─────────────────────────────────────────────────────────────────
+    async function doReset() {
+      if (!confirm('Reset ALL data to zero? This cannot be undone.')) return;
+      try {
+        const res = await fetch(`${API}/api/admin/reset`, {
+          method: 'POST',
+          headers: { 'X-Admin-Token': adminToken }
+        });
+        if (res.status === 401) { doLogout(); return; }
+        const data = await res.json();
+        renderAdminData(data);
+        toast('All data reset to 0');
+      } catch { toast('Error resetting data'); }
+    }
+
+    // ── Delete entry ──────────────────────────────────────────────────────────
+    async function deleteEntry(id) {
+      if (!confirm('Delete this entry and subtract its amount from the total?')) return;
+      try {
+        const res = await fetch(`${API}/api/admin/entry/${id}`, {
+          method: 'DELETE',
+          headers: { 'X-Admin-Token': adminToken }
+        });
+        if (res.status === 401) { doLogout(); return; }
+        const data = await res.json();
+        renderAdminData(data);
+        toast('Entry deleted and total adjusted');
+      } catch { toast('Error deleting entry'); }
+    }
+
+    // ── Toast ─────────────────────────────────────────────────────────────────
+    let _toastTimer = null;
+    function toast(msg) {
+      const el = document.getElementById('toast-admin');
+      el.textContent = msg;
+      el.style.display = 'block';
+      if (_toastTimer) clearTimeout(_toastTimer);
+      _toastTimer = setTimeout(() => { el.style.display = 'none'; }, 2500);
+    }
+
+    // ── Auto-login if token stored in session ──────────────────────────────────
+    if (adminToken) {
+      showPanel();
+    }
+  </script>
+</body>
+</html>
