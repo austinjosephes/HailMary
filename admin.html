@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel | അമ്മയോടൊപ്പം – CLC Velappaya</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%231e3a8a'/><text y='65' x='50' text-anchor='middle' font-size='50' fill='white'>M</text><path d='M50 15 L50 40 M40 25 L60 25' stroke='%23f59e0b' stroke-width='4' stroke-linecap='round'/></svg>">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -23,15 +27,16 @@
     .card { background: #fff; border-radius: 1rem; box-shadow: 0 2px 16px 0 rgba(30,58,138,.08); padding: 1.5rem; }
     .input { width: 100%; padding: .55rem .9rem; border: 1.5px solid #bfdbfe; border-radius: .6rem; font-size: 1rem; outline: none; transition: border-color .2s; }
     .input:focus { border-color: #2563eb; }
-    .btn { padding: .55rem 1.4rem; border-radius: .6rem; font-weight: 700; font-size: .9rem; cursor: pointer; transition: background .2s, opacity .2s; }
+    .btn { padding: .55rem 1.4rem; border-radius: .6rem; font-weight: 700; font-size: .9rem; cursor: pointer; transition: background .2s, opacity .2s, transform .1s; display: inline-flex; align-items: center; justify-content: center; gap: .4rem; }
+    .btn:active { transform: scale(0.98); }
     .btn-primary { background: #1e3a8a; color: #fff; }
     .btn-primary:hover { background: #1e40af; }
     .btn-danger  { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
     .btn-danger:hover { background: #fca5a5; }
-    .btn-sm { padding: .3rem .8rem; font-size: .8rem; }
+    .btn-sm { padding: .35rem .85rem; font-size: .8rem; }
     .stat-card { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); border-radius: 1rem; color: #fff; padding: 1.25rem 1.5rem; }
     .history-row:nth-child(even) { background: #f0f7ff; }
-    #toast-admin { position: fixed; bottom: 1.5rem; right: 1.5rem; background: #1e3a8a; color: #fff; padding: .65rem 1.3rem; border-radius: .8rem; font-size: .9rem; font-weight: 600; z-index: 9999; display: none; }
+    #toast-admin { position: fixed; bottom: 1.5rem; right: 1.5rem; background: #1e3a8a; color: #fff; padding: .65rem 1.3rem; border-radius: .8rem; font-size: .9rem; font-weight: 600; z-index: 9999; display: none; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
   </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-white min-h-screen">
@@ -41,7 +46,7 @@
     <div class="card w-full max-w-sm">
       <div class="text-center mb-6">
         <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center mx-auto mb-3 text-2xl text-blue-800">
-          <i class="fa-solid fa-lock"></i>
+          <i class="fa-solid fa-lock" aria-hidden="true"></i>
         </div>
         <h1 class="text-xl font-extrabold text-blue-950">Admin Login</h1>
         <p class="text-xs text-slate-500 mt-1">അമ്മയോടൊപ്പം | CLC Velappaya</p>
@@ -49,39 +54,39 @@
 
       <div class="space-y-4">
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wide">Username</label>
+          <label for="loginUser" class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wide">Username</label>
           <input type="text" id="loginUser" class="input" placeholder="Username" autocomplete="username">
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wide">Password</label>
+          <label for="loginPass" class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wide">Password</label>
           <input type="password" id="loginPass" class="input" placeholder="Password" autocomplete="current-password"
             onkeydown="if(event.key==='Enter') doLogin()">
         </div>
         <div id="loginError" class="hidden text-xs text-red-600 font-semibold text-center"></div>
-        <button onclick="doLogin()" class="btn btn-primary w-full text-center mt-2">
-          <i class="fa-solid fa-right-to-bracket mr-1"></i> Login
+        <button onclick="doLogin()" id="loginBtn" class="btn btn-primary w-full text-center mt-2">
+          <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i> Login
         </button>
       </div>
     </div>
   </div>
 
   <!-- Admin Panel (hidden until logged in) -->
-  <div id="adminPanel" class="hidden max-w-4xl mx-auto px-4 py-8">
+  <div id="adminPanel" class="hidden max-w-5xl mx-auto px-4 py-8">
 
     <!-- Header -->
     <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
       <div>
-        <h1 class="text-2xl font-extrabold text-blue-950">
-          <i class="fa-solid fa-shield-halved text-blue-600 mr-2"></i>Admin Panel
+        <h1 class="text-2xl font-extrabold text-blue-950 flex items-center gap-2">
+          <i class="fa-solid fa-shield-halved text-blue-600" aria-hidden="true"></i>Admin Panel
         </h1>
-        <p class="text-xs text-slate-500">അമ്മയോടൊപ്പം | CLC Velappaya</p>
+        <p class="text-xs text-slate-500">അമ്മയോടൊപ്പം | CLC Velappaya Devotional Campaign</p>
       </div>
       <div class="flex gap-2 flex-wrap">
         <a href="/" class="btn btn-primary btn-sm">
-          <i class="fa-solid fa-arrow-left mr-1"></i> User Site
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Public Site
         </a>
         <button onclick="doLogout()" class="btn btn-danger btn-sm">
-          <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+          <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Logout
         </button>
       </div>
     </div>
@@ -91,12 +96,12 @@
       <div class="stat-card">
         <div class="text-xs font-bold uppercase tracking-wider opacity-75 mb-1">Total Hail Marys</div>
         <div class="text-3xl font-black" id="admTotal">—</div>
-        <div class="text-xs opacity-70 mt-1">/&nbsp;100,000</div>
+        <div class="text-xs opacity-70 mt-1">/ 100,000 Target</div>
       </div>
       <div class="stat-card" style="background: linear-gradient(135deg, #065f46 0%, #059669 100%)">
         <div class="text-xs font-bold uppercase tracking-wider opacity-75 mb-1">Today's Count</div>
         <div class="text-3xl font-black" id="admToday">—</div>
-        <div class="text-xs opacity-70 mt-1">Hail Marys today</div>
+        <div class="text-xs opacity-70 mt-1" id="admTodayLabel">Credited today (Asia/Kolkata)</div>
       </div>
       <div class="stat-card" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)">
         <div class="text-xs font-bold uppercase tracking-wider opacity-75 mb-1">Remaining</div>
@@ -111,50 +116,86 @@
       <!-- Override total -->
       <div class="card">
         <h3 class="font-bold text-base text-slate-800 mb-3 flex items-center gap-2">
-          <i class="fa-solid fa-pen-to-square text-blue-600"></i> Set Exact Total
+          <i class="fa-solid fa-pen-to-square text-blue-600" aria-hidden="true"></i> Set Exact Total
         </h3>
-        <div class="flex gap-2">
-          <input type="number" id="overrideInput" class="input" min="0" max="100000" placeholder="e.g. 5000">
-          <button onclick="doOverride()" class="btn btn-primary whitespace-nowrap">Save</button>
+        <p class="text-xs text-slate-500 mb-3">Adjusts the authoritative campaign total and records an audit event in the database.</p>
+        <div class="space-y-2">
+          <input type="number" id="overrideInput" class="input" min="0" max="100000" placeholder="New Total (0–100000)">
+          <input type="text" id="overrideReason" class="input text-sm" placeholder="Reason (e.g. Parish count correction)">
+          <button onclick="doOverride()" class="btn btn-primary w-full">Save Count</button>
         </div>
-        <p class="text-xs text-slate-400 mt-2">Sets the global total to this exact number.</p>
       </div>
 
       <!-- Reset -->
       <div class="card">
         <h3 class="font-bold text-base text-slate-800 mb-3 flex items-center gap-2">
-          <i class="fa-solid fa-rotate-left text-red-500"></i> Reset All Data
+          <i class="fa-solid fa-rotate-left text-red-500" aria-hidden="true"></i> Reset Campaign Data
         </h3>
-        <p class="text-xs text-slate-500 mb-3">This will reset the total, today's count, and all history to zero. This cannot be undone.</p>
-        <button onclick="doReset()" class="btn btn-danger w-full">
-          <i class="fa-solid fa-trash-can mr-1"></i> Reset Everything to 0
-        </button>
+        <p class="text-xs text-slate-500 mb-3">Resets the total and today's count to zero. An audit event will be recorded.</p>
+        <div class="space-y-2">
+          <input type="text" id="resetReason" class="input text-sm" placeholder="Reason for reset (optional)">
+          <button onclick="doReset()" class="btn btn-danger w-full">
+            <i class="fa-solid fa-trash-can" aria-hidden="true"></i> Reset Total &amp; Today's Count
+          </button>
+        </div>
       </div>
     </div>
 
     <!-- Submission history -->
-    <div class="card">
+    <div class="card mb-6">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h3 class="font-bold text-base text-slate-800 flex items-center gap-2">
-          <i class="fa-solid fa-clock-rotate-left text-blue-600"></i> Submission History
-        </h3>
+        <div>
+          <h3 class="font-bold text-base text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-clock-rotate-left text-blue-600" aria-hidden="true"></i> Submission History
+          </h3>
+          <p class="text-xs text-slate-400">Showing newest submissions first (deleting reverses credited amount)</p>
+        </div>
         <button onclick="loadAdminData()" class="btn btn-primary btn-sm">
-          <i class="fa-solid fa-arrows-rotate mr-1"></i> Refresh
+          <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i> Refresh
         </button>
       </div>
 
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
-            <tr class="text-xs text-slate-500 uppercase tracking-wider border-b border-slate-100">
-              <th class="py-2 px-3 text-left font-bold">#</th>
-              <th class="py-2 px-3 text-left font-bold">Amount</th>
-              <th class="py-2 px-3 text-left font-bold">Time</th>
-              <th class="py-2 px-3 text-left font-bold">Action</th>
+            <tr class="text-xs text-slate-500 uppercase tracking-wider border-b border-slate-100 bg-slate-50">
+              <th class="py-2.5 px-3 text-left font-bold">#</th>
+              <th class="py-2.5 px-3 text-left font-bold">Credited</th>
+              <th class="py-2.5 px-3 text-left font-bold">Submitted</th>
+              <th class="py-2.5 px-3 text-left font-bold">Time (IST)</th>
+              <th class="py-2.5 px-3 text-left font-bold">Status</th>
+              <th class="py-2.5 px-3 text-right font-bold">Action</th>
             </tr>
           </thead>
           <tbody id="historyTableBody">
-            <tr><td colspan="4" class="text-center py-6 text-slate-400 italic">Loading…</td></tr>
+            <tr><td colspan="6" class="text-center py-6 text-slate-400 italic">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Audit Events / Admin Activity Log -->
+    <div class="card">
+      <div class="mb-4">
+        <h3 class="font-bold text-base text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-clipboard-list text-blue-600" aria-hidden="true"></i> Admin Audit Log
+        </h3>
+        <p class="text-xs text-slate-400">Immutable record of administrative overrides, resets, and deletions</p>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-xs text-slate-500 uppercase tracking-wider border-b border-slate-100 bg-slate-50">
+              <th class="py-2.5 px-3 text-left font-bold">Action</th>
+              <th class="py-2.5 px-3 text-left font-bold">Change</th>
+              <th class="py-2.5 px-3 text-left font-bold">Reason</th>
+              <th class="py-2.5 px-3 text-left font-bold">Admin</th>
+              <th class="py-2.5 px-3 text-right font-bold">Date &amp; Time</th>
+            </tr>
+          </thead>
+          <tbody id="auditTableBody">
+            <tr><td colspan="5" class="text-center py-6 text-slate-400 italic">No admin events recorded yet.</td></tr>
           </tbody>
         </table>
       </div>
@@ -162,19 +203,39 @@
 
   </div><!-- /adminPanel -->
 
-  <div id="toast-admin"></div>
+  <div id="toast-admin" role="status" aria-live="polite"></div>
 
   <script>
     const API = '';
     let adminToken = sessionStorage.getItem('adminToken') || '';
     let pollTimer  = null;
 
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
     // ── Login / Logout ────────────────────────────────────────────────────────
     async function doLogin() {
       const u = document.getElementById('loginUser').value.trim();
       const p = document.getElementById('loginPass').value.trim();
       const errEl = document.getElementById('loginError');
+      const btn = document.getElementById('loginBtn');
       errEl.classList.add('hidden');
+
+      if (!u || !p) {
+        errEl.textContent = 'Please enter both username and password.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Logging in…';
 
       try {
         const res = await fetch(`${API}/api/admin/login`, {
@@ -192,8 +253,11 @@
           errEl.classList.remove('hidden');
         }
       } catch {
-        errEl.textContent = 'Cannot reach the server. Make sure server.py is running.';
+        errEl.textContent = 'Cannot reach the server. Please check your connection.';
         errEl.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i> Login';
       }
     }
 
@@ -206,6 +270,7 @@
       } catch {}
       adminToken = '';
       sessionStorage.removeItem('adminToken');
+      if (pollTimer) clearInterval(pollTimer);
       document.getElementById('adminPanel').classList.add('hidden');
       document.getElementById('loginScreen').classList.remove('hidden');
     }
@@ -215,10 +280,10 @@
       document.getElementById('adminPanel').classList.remove('hidden');
       loadAdminData();
       if (pollTimer) clearInterval(pollTimer);
-      pollTimer = setInterval(loadAdminData, 8000);
+      pollTimer = setInterval(loadAdminData, 6000);
     }
 
-    // ── Load data ─────────────────────────────────────────────────────────────
+    // ── Load Data ─────────────────────────────────────────────────────────────
     async function loadAdminData() {
       try {
         const res = await fetch(`${API}/api/admin/data`, {
@@ -227,7 +292,7 @@
         if (res.status === 401) { doLogout(); return; }
         const data = await res.json();
         renderAdminData(data);
-      } catch (e) {
+      } catch {
         toast('Could not fetch data from server');
       }
     }
@@ -237,67 +302,127 @@
       const today     = Number(data.todayCount) || 0;
       const remaining = Math.max(0, 100000 - total);
       const history   = Array.isArray(data.history) ? data.history : [];
+      const events    = Array.isArray(data.adminEvents) ? data.adminEvents : [];
 
       document.getElementById('admTotal').textContent     = total.toLocaleString();
       document.getElementById('admToday').textContent     = today.toLocaleString();
       document.getElementById('admRemaining').textContent = remaining.toLocaleString();
 
+      // Submissions table
       const tbody = document.getElementById('historyTableBody');
       if (history.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-slate-400 italic">No submissions yet.</td></tr>`;
-        return;
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-400 italic">No submissions yet.</td></tr>`;
+      } else {
+        tbody.innerHTML = history.map((item, idx) => {
+          const credited = Number(item.creditedAmount !== undefined ? item.creditedAmount : item.amount) || 0;
+          const submitted = Number(item.submittedAmount !== undefined ? item.submittedAmount : item.amount) || credited;
+          const time = escapeHtml(item.time || 'Recent');
+          const date = escapeHtml(item.date || '');
+          const status = escapeHtml(item.status || 'completed');
+
+          let statusBadge = '<span class="text-xs px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-semibold">Credited</span>';
+          if (credited < submitted && credited > 0) {
+            statusBadge = '<span class="text-xs px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold">Partial (Goal hit)</span>';
+          } else if (credited === 0 && submitted > 0) {
+            statusBadge = '<span class="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-semibold">Goal Full (0 credited)</span>';
+          }
+
+          return `
+            <tr class="history-row border-b border-slate-50">
+              <td class="py-2 px-3 text-slate-400 text-xs">${idx + 1}</td>
+              <td class="py-2 px-3 font-bold text-blue-800">+${credited.toLocaleString()}</td>
+              <td class="py-2 px-3 text-slate-500 font-medium">${submitted.toLocaleString()}</td>
+              <td class="py-2 px-3 text-slate-600 text-xs">${time} <span class="text-slate-400">(${date})</span></td>
+              <td class="py-2 px-3">${statusBadge}</td>
+              <td class="py-2 px-3 text-right">
+                <button onclick="deleteEntry(${item.id})" class="btn btn-danger btn-sm" title="Delete entry and reverse ${credited} prayers">
+                  <i class="fa-solid fa-trash-can" aria-hidden="true"></i> Delete
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
       }
-      tbody.innerHTML = history.map((item, idx) => `
-        <tr class="history-row border-b border-slate-50">
-          <td class="py-2 px-3 text-slate-400 text-xs">${idx + 1}</td>
-          <td class="py-2 px-3 font-bold text-blue-800">+${item.amount.toLocaleString()}</td>
-          <td class="py-2 px-3 text-slate-500 text-xs">${item.time}</td>
-          <td class="py-2 px-3">
-            <button onclick="deleteEntry(${item.id})" class="btn btn-danger btn-sm" title="Delete this entry">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
-          </td>
-        </tr>
-      `).join('');
+
+      // Audit table
+      const auditTbody = document.getElementById('auditTableBody');
+      if (events.length === 0) {
+        auditTbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-400 italic">No admin events recorded yet.</td></tr>`;
+      } else {
+        auditTbody.innerHTML = events.map(ev => {
+          const action = escapeHtml(ev.action || 'admin_action');
+          const oldVal = escapeHtml(ev.oldValue || '—');
+          const newVal = escapeHtml(ev.newValue || '—');
+          const reason = escapeHtml(ev.reason || 'Manual administrative action');
+          const admin  = escapeHtml(ev.admin || 'admin');
+          const date   = ev.createdAt ? new Date(ev.createdAt).toLocaleString() : 'Recent';
+
+          return `
+            <tr class="border-b border-slate-50 text-xs">
+              <td class="py-2 px-3 font-bold text-slate-700">${action}</td>
+              <td class="py-2 px-3 text-slate-600">${oldVal} → <strong class="text-blue-800">${newVal}</strong></td>
+              <td class="py-2 px-3 text-slate-500">${reason}</td>
+              <td class="py-2 px-3 text-slate-600 font-medium">${admin}</td>
+              <td class="py-2 px-3 text-right text-slate-400">${date}</td>
+            </tr>
+          `;
+        }).join('');
+      }
     }
 
-    // ── Override total ────────────────────────────────────────────────────────
+    // ── Override Total ────────────────────────────────────────────────────────
     async function doOverride() {
-      const val = parseInt(document.getElementById('overrideInput').value, 10);
-      if (isNaN(val) || val < 0) { toast('Enter a valid number (0–100000)'); return; }
-      if (!confirm(`Set total to ${val.toLocaleString()}?`)) return;
+      const valInput = document.getElementById('overrideInput').value.trim();
+      const reasonInput = document.getElementById('overrideReason').value.trim() || 'Admin manual count override';
+      const val = parseInt(valInput, 10);
+
+      if (isNaN(val) || val < 0 || val > 100000) {
+        toast('Enter a valid total number between 0 and 100,000');
+        return;
+      }
+      if (!confirm(`Set total to ${val.toLocaleString()}? This will be recorded in the audit log.`)) return;
+
       try {
         const res = await fetch(`${API}/api/admin/override`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken },
-          body: JSON.stringify({ totalCount: val })
+          body: JSON.stringify({ totalCount: val, reason: reasonInput })
         });
         if (res.status === 401) { doLogout(); return; }
         const data = await res.json();
         renderAdminData(data);
         document.getElementById('overrideInput').value = '';
-        toast(`Total set to ${val.toLocaleString()}`);
-      } catch { toast('Error updating total'); }
+        document.getElementById('overrideReason').value = '';
+        toast(`Total updated to ${val.toLocaleString()}`);
+      } catch {
+        toast('Error updating total');
+      }
     }
 
     // ── Reset ─────────────────────────────────────────────────────────────────
     async function doReset() {
-      if (!confirm('Reset ALL data to zero? This cannot be undone.')) return;
+      const reasonInput = document.getElementById('resetReason').value.trim() || 'Admin requested campaign reset';
+      if (!confirm('Are you sure you want to reset the total and today count to ZERO?')) return;
+
       try {
         const res = await fetch(`${API}/api/admin/reset`, {
           method: 'POST',
-          headers: { 'X-Admin-Token': adminToken }
+          headers: { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken },
+          body: JSON.stringify({ reason: reasonInput })
         });
         if (res.status === 401) { doLogout(); return; }
         const data = await res.json();
         renderAdminData(data);
-        toast('All data reset to 0');
-      } catch { toast('Error resetting data'); }
+        document.getElementById('resetReason').value = '';
+        toast('Campaign reset to 0');
+      } catch {
+        toast('Error resetting data');
+      }
     }
 
-    // ── Delete entry ──────────────────────────────────────────────────────────
+    // ── Delete Entry ──────────────────────────────────────────────────────────
     async function deleteEntry(id) {
-      if (!confirm('Delete this entry and subtract its amount from the total?')) return;
+      if (!confirm('Delete this submission? Its credited prayers will be subtracted from the total.')) return;
       try {
         const res = await fetch(`${API}/api/admin/entry/${id}`, {
           method: 'DELETE',
@@ -306,8 +431,10 @@
         if (res.status === 401) { doLogout(); return; }
         const data = await res.json();
         renderAdminData(data);
-        toast('Entry deleted and total adjusted');
-      } catch { toast('Error deleting entry'); }
+        toast('Submission deleted and total adjusted');
+      } catch {
+        toast('Error deleting entry');
+      }
     }
 
     // ── Toast ─────────────────────────────────────────────────────────────────
@@ -317,10 +444,10 @@
       el.textContent = msg;
       el.style.display = 'block';
       if (_toastTimer) clearTimeout(_toastTimer);
-      _toastTimer = setTimeout(() => { el.style.display = 'none'; }, 2500);
+      _toastTimer = setTimeout(() => { el.style.display = 'none'; }, 2800);
     }
 
-    // ── Auto-login if token stored in session ──────────────────────────────────
+    // Auto-login on load if session token exists
     if (adminToken) {
       showPanel();
     }
