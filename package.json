@@ -2,10 +2,9 @@
   "name": "ammayodoppam",
   "version": "1.0.0",
   "description": "അമ്മയോടൊപ്പം | CLC Velappaya - 100,000 Hail Marys Devotional Offering Campaign",
-  "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
+    "start": "node dev-server.js",
+    "dev": "node dev-server.js",
     "test": "node test/suite.js"
   },
   "repository": {
@@ -22,6 +21,9 @@
   "author": "CLC Velappaya",
   "license": "ISC",
   "type": "commonjs",
+  "engines": {
+    "node": ">=20.x"
+  },
   "dependencies": {
     "dotenv": "^18.0.5",
     "pg": "^8.23.1"

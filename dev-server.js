@@ -1,7 +1,11 @@
 /**
  * അമ്മയോടൊപ്പം | CLC Velappaya
- * Local Development & Production Node.js Server
- * Mirrors Vercel Serverless Function behavior and serves static frontend.
+ * LOCAL DEVELOPMENT SERVER ONLY — NOT USED BY VERCEL IN PRODUCTION
+ *
+ * Run locally with:  node dev-server.js  (or  npm run dev)
+ * Vercel uses api/ serverless functions + static file serving instead.
+ * IMPORTANT: This file is intentionally NOT named "server.js" so that Vercel's
+ * zero-config auto-detection does NOT treat it as a catch-all Node.js entrypoint.
  */
 
 require('dotenv').config();
