@@ -7,7 +7,7 @@ async function testE2E() {
   console.log('======================================================\n');
 
   // 1. Static Asset Delivery Verification
-  const pages = ['/', '/index.html', '/admin.html', '/style.css', '/app.js'];
+  const pages = ['/', '/index.html', '/admin.html', '/style.css', '/script.js'];
   for (const page of pages) {
     const res = await fetch('http://localhost:8000' + page);
     assert.strictEqual(res.status, 200, `Page failed: ${page}`);
